@@ -9,7 +9,7 @@ class CalculatorModel extends ChangeNotifier {
   String get display => _display;
 
   void inputNumber(String number) {
-    if (_display == '0') {
+    if (_display == '0' || ['+', '-', '*', '/'].contains(_display)) {
       _display = number;
     } else {
       _display += number;
@@ -20,12 +20,19 @@ class CalculatorModel extends ChangeNotifier {
   void inputOperation(String operation) {
     _firstNumber = double.parse(_display);
     _operation = operation;
-    _display = '0';
+    _display += _operation;
     notifyListeners();
   }
 
   void calculate() {
-    _secondNumber = double.parse(_display);
+    String display = _display;
+    if (_operation.isNotEmpty) {
+      final parts = display.split(RegExp(r'[+\-*/]'));
+      if (parts.length > 1) {
+        _secondNumber = double.parse(parts[1]);
+      }
+    }
+
     double result;
 
     switch (_operation) {
