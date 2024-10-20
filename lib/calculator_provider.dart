@@ -5,11 +5,13 @@ class CalculatorModel extends ChangeNotifier {
   double _firstNumber = 0;
   double _secondNumber = 0;
   String _operation = '';
-
+  String temp ='';
   String get display => _display;
 
   void inputNumber(String number) {
-    if (_display == '0' || ['+', '-', '*', '/'].contains(_display)) {
+
+    if (_display == '0' || ['+', '-', '*', '/'].contains(_display) ||
+        _display == temp) {
       _display = number;
     } else {
       _display += number;
@@ -27,14 +29,12 @@ class CalculatorModel extends ChangeNotifier {
   void calculate() {
     String display = _display;
     if (_operation.isNotEmpty) {
-      final parts = display.split(RegExp(r'[+\-*/]'));
+      final parts = display.split(RegExp(r'[+\-*/%]'));
       if (parts.length > 1) {
         _secondNumber = double.parse(parts[1]);
       }
     }
-
-    double result;
-
+       double result;
     switch (_operation) {
       case '+':
         result = _firstNumber + _secondNumber;
@@ -48,11 +48,15 @@ class CalculatorModel extends ChangeNotifier {
       case '/':
         result = _firstNumber / _secondNumber;
         break;
+      case '%':
+        result = (_firstNumber % _secondNumber) ;
+        break;
       default:
         result = 0;
     }
-
+       temp = result.toString();
     _display = result.toString();
+
     notifyListeners();
   }
 
@@ -61,6 +65,13 @@ class CalculatorModel extends ChangeNotifier {
     _firstNumber = 0;
     _secondNumber = 0;
     _operation = '';
+    notifyListeners();
+  }
+  void delete()
+  {
+    if(_display.isNotEmpty){
+      _display=_display.substring(0,_display.length - 1);
+    }
     notifyListeners();
   }
 }

@@ -30,65 +30,76 @@ class CalculatorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final calculator = Provider.of<CalculatorModel>(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Calculator'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              alignment: Alignment.bottomRight,
-              padding: EdgeInsets.all(24),
-              child: Text(
-                calculator.display,
-                style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Calculator'),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                alignment: Alignment.bottomRight,
+                padding: EdgeInsets.all(24),
+                child: Text(
+                  calculator.display,
+                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _buildButton(context, '7'),
-              _buildButton(context, '8'),
-              _buildButton(context, '9'),
-              _buildButton(context, '/'),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _buildButton(context, '4'),
-              _buildButton(context, '5'),
-              _buildButton(context, '6'),
-              _buildButton(context, '*'),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _buildButton(context, '1'),
-              _buildButton(context, '2'),
-              _buildButton(context, '3'),
-              _buildButton(context, '-'),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _buildButton(context, '0'),
-              _buildButton(context, 'C'),
-              _buildButton(context, '='),
-              _buildButton(context, '+'),
-            ],
-          ),
-        ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                _values(context, 'C'),
+                _values(context, '%'),
+                _values(context, 'Del'),
+                _values(context, '/'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                _values(context, '7'),
+                _values(context, '8'),
+                _values(context, '9'),
+                _values(context, '*'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                _values(context, '4'),
+                _values(context, '5'),
+                _values(context, '6'),
+                _values(context, '-'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                _values(context, '1'),
+                _values(context, '2'),
+                _values(context, '3'),
+                _values(context, '+'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                _values(context, '.'),
+                _values(context, '0'),
+                _values(context, '00'),
+                _values(context, '='),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildButton(BuildContext context, String label) {
+  Widget _values(BuildContext context, String label) {
     final calculator = Provider.of<CalculatorModel>(context, listen: false);
 
     return ElevatedButton(
@@ -97,8 +108,10 @@ class CalculatorScreen extends StatelessWidget {
           calculator.clear();
         } else if (label == '=') {
           calculator.calculate();
-        } else if (['+', '-', '*', '/'].contains(label)) {
+        } else if (['+', '-', '*', '/','%'].contains(label)) {
           calculator.inputOperation(label);
+        }else if(label == 'Del'){
+          calculator.delete();
         } else {
           calculator.inputNumber(label);
         }
